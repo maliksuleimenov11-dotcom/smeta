@@ -4,8 +4,11 @@ const items = document.querySelector("#items");
 const template = document.querySelector("#item-template");
 const addButton = document.querySelector("#add-item");
 const totalOutput = document.querySelector("#total");
+const discountRate = document.querySelector("#discount-rate");
+const vatRate = document.querySelector("#vat-rate");
+const currency = document.querySelector("#currency");
 const moneyFormatter = new Intl.NumberFormat("ru-RU", {
-  maximumFractionDigits: 2,
+  maximumFractionDigits: 0,
 });
 
 function readNumber(value) {
@@ -16,15 +19,18 @@ function readNumber(value) {
 }
 
 function roundMoney(value) {
-  const rounded = Math.round(value * 100) / 100;
+  const rounded = Math.round(value);
   return Number.isFinite(rounded) ? rounded : 0;
 }
 
 function formatMoney(value) {
-  return `${moneyFormatter.format(value === 0 ? 0 : value).replace(/[\u00a0\u202f]/g, " ")} ₸`;
+  return `${moneyFormatter.format(value === 0 ? 0 : value).replace(/[\u00a0\u202f]/g, " ")} ${currency.value}`;
 }
 
 function recalculate() {
+  document.querySelectorAll(".currency-symbol").forEach((symbol) => {
+    symbol.textContent = currency.value;
+  });
   let total = 0;
   for (const row of items.rows) {
     const quantity = readNumber(row.querySelector(".item-quantity").value);
@@ -33,7 +39,18 @@ function recalculate() {
     row.querySelector(".item-total").textContent = formatMoney(amount);
     total = roundMoney(total + amount);
   }
-  totalOutput.textContent = formatMoney(total);
+  const discount = roundMoney(total * (readNumber(discountRate.value) / 100));
+  const discounted = roundMoney(total - discount);
+  const vat = roundMoney(discounted * (readNumber(vatRate.value) / 100));
+
+  document.querySelector("#subtotal").textContent = formatMoney(total);
+  document.querySelector("#discount-amount").textContent = formatMoney(-discount);
+  document.querySelector("#discounted-amount").textContent = formatMoney(discounted);
+  document.querySelector("#vat-amount").textContent = formatMoney(vat);
+  document.querySelector("#discount-line").hidden = discount === 0;
+  document.querySelector("#discounted-line").hidden = discounted === 0;
+  document.querySelector("#vat-line").hidden = vat === 0;
+  totalOutput.textContent = formatMoney(roundMoney(discounted + vat));
 }
 
 function addItem(focus = true) {
@@ -45,6 +62,9 @@ function addItem(focus = true) {
 }
 
 addButton.addEventListener("click", () => addItem());
+discountRate.addEventListener("input", recalculate);
+vatRate.addEventListener("input", recalculate);
+currency.addEventListener("change", recalculate);
 items.addEventListener("input", recalculate);
 items.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" || event.isComposing || event.repeat) return;

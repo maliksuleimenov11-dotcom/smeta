@@ -29,16 +29,29 @@
       <table>
         <caption class="visually-hidden">Позиции сметы: количество, цена и сумма</caption>
         <thead>
-          <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, ₸</th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
+          <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, <span class="currency-symbol">₸</span></th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
         </thead>
         <tbody id="items"></tbody>
       </table>
       <button type="button" class="add-button" id="add-item">+ Добавить позицию</button>
+      <div class="calculation-settings">
+        <label>Скидка, %<input type="text" inputmode="decimal" id="discount-rate" value="0" autocomplete="off"></label>
+        <label>НДС, %<input type="text" inputmode="decimal" id="vat-rate" value="0" autocomplete="off"></label>
+        <label>Валюта<select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
+      </div>
     </section>
 
-    <section class="card total-card" aria-labelledby="total-title">
-      <h2 id="total-title">Итого к оплате</h2>
-      <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
+    <section class="card summary-card" aria-labelledby="total-title">
+      <dl class="summary-lines">
+        <div class="summary-line"><dt>Сумма</dt><dd><output id="subtotal">0 ₸</output></dd></div>
+        <div class="summary-line" id="discount-line" hidden><dt>Скидка</dt><dd><output id="discount-amount">0 ₸</output></dd></div>
+        <div class="summary-line" id="discounted-line" hidden><dt>Сумма со скидкой</dt><dd><output id="discounted-amount">0 ₸</output></dd></div>
+        <div class="summary-line" id="vat-line" hidden><dt>НДС</dt><dd><output id="vat-amount">0 ₸</output></dd></div>
+      </dl>
+      <div class="total-card">
+        <h2 id="total-title">Итого к оплате</h2>
+        <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
+      </div>
     </section>
   </main>
 
@@ -47,7 +60,7 @@
       <td><label><span class="field-label">Наименование</span><input type="text" class="item-name" placeholder="Товар или услуга"></label></td>
       <td><label><span class="field-label">Количество</span><input type="text" inputmode="decimal" class="item-quantity" placeholder="0" autocomplete="off"></label></td>
       <td><label><span class="field-label">Единица</span><select class="item-unit"><option value="шт">шт</option><option value="час">час</option><option value="услуга">услуга</option></select></label></td>
-      <td><label><span class="field-label">Цена, ₸</span><input type="text" inputmode="decimal" class="item-price" placeholder="0" autocomplete="off"></label></td>
+      <td><label><span class="field-label">Цена, <span class="currency-symbol">₸</span></span><input type="text" inputmode="decimal" class="item-price" placeholder="0" autocomplete="off"></label></td>
       <td class="line-total"><span class="mobile-label" aria-hidden="true">Сумма</span><output class="item-total" aria-label="Сумма строки">0 ₸</output></td>
       <td class="delete-cell"><button type="button" class="delete-button" aria-label="Удалить позицию">✕</button></td>
     </tr>
