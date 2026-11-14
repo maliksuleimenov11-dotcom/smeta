@@ -309,7 +309,29 @@ const services = [
   },
 ];
 
-// Отображаем справочные карточки без добавления услуг в смету.
+// Добавляем услугу отдельно, заполняя только единственную пустую стартовую строку.
+function addCatalogService(service) {
+  const values = { name: service.name, quantity: "1", unit: service.unit, price: String(service.basePrice) };
+  const firstRow = items.rows[0];
+  const emptyStart = items.rows.length === 1 &&
+    [".item-name", ".item-quantity", ".item-price"].every((selector) =>
+      firstRow.querySelector(selector).value.trim() === "") &&
+    firstRow.querySelector(".item-unit").value === "шт";
+
+  clearCopyFeedback();
+  if (emptyStart) {
+    for (const [key, selector] of Object.entries(itemFields)) {
+      firstRow.querySelector(selector).value = values[key];
+    }
+    recalculate();
+    saveDraft();
+    firstRow.querySelector(".item-name").focus();
+  } else {
+    addItem(true, values);
+  }
+}
+
+// Отображаем карточки каталога с кнопками добавления в КП.
 function renderCatalog() {
   const list = document.querySelector("#service-list");
   list.replaceChildren();
@@ -324,7 +346,13 @@ function renderCatalog() {
     const price = document.createElement("p");
     price.className = "catalog-price";
     price.textContent = `от ${moneyFormatter.format(service.basePrice).replace(/[\u00a0\u202f]/g, " ")} ₸`;
-    card.append(title, description, price);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "secondary-button catalog-add";
+    button.textContent = "Добавить в КП";
+    button.setAttribute("aria-label", `Добавить в КП: ${service.name}`);
+    button.addEventListener("click", () => addCatalogService(service));
+    card.append(title, description, price, button);
     list.append(card);
   }
 }
