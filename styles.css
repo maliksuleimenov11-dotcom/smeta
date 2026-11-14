@@ -16,11 +16,15 @@ h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.035
 h2 { font-size: 20px; margin: 0 0 24px; }
 .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500; }
-input, select, button { min-width: 0; min-height: 44px; font: inherit; }
-input, select { width: 100%; padding: 11px 12px; border: 1px solid #cbd3df; border-radius: 8px; color: #1e293b; background: #fff; }
+input, select, textarea, button { min-width: 0; min-height: 44px; font: inherit; }
+input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd3df; border-radius: 8px; color: #1e293b; background: #fff; }
+textarea { resize: vertical; line-height: 1.6; }
+.comment-card h2 label { font: inherit; }
+.print-only, .print-value { display: none; }
+.print-actions p { font-size: 14px; color: #596579; line-height: 1.6; }
 input::placeholder { color: #758196; }
 button { cursor: pointer; border-radius: 8px; }
-:is(input, select, button):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+:is(input, select, textarea, button):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 th { color: #596579; font-size: 13px; font-weight: 500; text-align: left; padding: 0 8px 12px; }
 th:first-child { width: 30%; }
@@ -52,7 +56,7 @@ td input, td select { font-size: 15px; }
 .visually-hidden, .field-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .mobile-label { display: none; }
 
-@media (max-width: 800px) and (min-width: 641px) {
+@media screen and (max-width: 800px) and (min-width: 641px) {
   .estimate { padding: 32px 16px; }
   .card { padding: 20px 16px; }
   td, th { padding-left: 4px; padding-right: 4px; }
@@ -60,7 +64,7 @@ td input, td select { font-size: 15px; }
   th:first-child { width: 25%; }
 }
 
-@media (max-width: 640px) {
+@media screen and (max-width: 640px) {
   .estimate { padding: 28px 16px; }
   .card { padding: 20px 16px; margin-bottom: 16px; }
   .details-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -78,4 +82,39 @@ td input, td select { font-size: 15px; }
   .add-button { width: 100%; margin-top: 20px; }
   .total-card { align-items: flex-start; flex-direction: column; gap: 12px; }
   #total { text-align: left; max-width: 100%; }
+}
+
+@page { size: A4 portrait; margin: 15mm; }
+
+@media print {
+  :root, body { background: #fff; color: #000; font-size: 11pt; }
+  .estimate { max-width: none; margin: 0; padding: 0; }
+  .page-header, button, .print-actions, .calculation-settings,
+  .document-meta, input, select, textarea, .delete-cell,
+  th:last-child, .field-label, .mobile-label { display: none !important; }
+  .print-only, .print-value { display: block; }
+  #print-title { font-size: 20pt; letter-spacing: normal; margin: 0 0 8mm; }
+  .card { padding: 0; margin: 0 0 7mm; border: 0; border-radius: 0; box-shadow: none; }
+  h2 { font-size: 13pt; margin: 0 0 3mm; break-after: avoid; }
+  .details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5mm; }
+  label { gap: 1mm; font-size: 11pt; }
+  .print-value { font-weight: 400; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { display: table-header-group; }
+  th, td, th:first-child, td:first-child { padding: 2.5mm; border: 1px solid #555; color: #000; font-size: 10pt; vertical-align: top; }
+  th:first-child { width: 34%; }
+  th:nth-child(2) { width: 15%; }
+  th:nth-child(3) { width: 13%; }
+  th:nth-child(4) { width: 18%; }
+  th:nth-child(5) { width: 20%; }
+  tr { break-inside: avoid; }
+  td label { display: block; font-size: 10pt; }
+  .summary-card { width: 105mm; max-width: 100%; margin-left: auto; break-inside: avoid; }
+  .summary-lines { margin-bottom: 3mm; padding-bottom: 3mm; border-color: #555; }
+  .summary-line { margin-bottom: 2mm; }
+  .summary-line dt { color: #000; }
+  .total-card { flex-direction: row; align-items: baseline; gap: 4mm; }
+  .total-card h2 { font-size: 12pt; }
+  #total { font-size: 16pt; color: #000; text-align: right; }
+  .signature { margin-top: 10mm; break-inside: avoid; }
 }
