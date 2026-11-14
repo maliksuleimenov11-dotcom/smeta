@@ -83,7 +83,10 @@
 
   <template id="item-template">
     <tr>
-      <td><label><span class="field-label">Наименование</span><input type="text" class="item-name" placeholder="Товар или услуга"></label></td>
+      <td>
+        <label><span class="field-label">Наименование</span><input type="text" class="item-name" placeholder="Товар или услуга"></label>
+        <label class="item-description-label"><span class="description-label-text">Описание <span class="optional-note">(необязательно)</span></span><textarea class="item-description" rows="2" placeholder="Что входит в работу"></textarea></label>
+      </td>
       <td><label><span class="field-label">Количество</span><input type="text" inputmode="decimal" class="item-quantity" placeholder="0" autocomplete="off"></label></td>
       <td><label><span class="field-label">Единица</span><select class="item-unit"><option value="шт">шт</option><option value="час">час</option><option value="услуга">услуга</option></select></label></td>
       <td><label><span class="field-label">Цена, <span class="currency-symbol">₸</span></span><input type="text" inputmode="decimal" class="item-price" placeholder="0" autocomplete="off"></label></td>

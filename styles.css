@@ -51,6 +51,9 @@ td { border-top: 1px solid #e8ecf2; padding: 16px 8px; vertical-align: middle; }
 td:first-child, th:first-child { padding-left: 0; }
 td:last-child, th:last-child { padding-right: 0; }
 td input, td select { font-size: 15px; }
+.item-description-label { margin-top: 10px; font-size: 13px; }
+.optional-note { color: #596579; font-weight: 400; }
+.item-description { font-size: 14px; }
 .amount-heading, .line-total { text-align: right; }
 .item-total { font-weight: 600; overflow-wrap: anywhere; }
 .delete-button { width: 44px; padding: 0; border: 1px solid #e2e7ef; background: #fff; color: #596579; font-size: 18px; }
@@ -125,6 +128,11 @@ td input, td select { font-size: 15px; }
   th:nth-child(5) { width: 20%; }
   tr { break-inside: avoid; }
   td label { display: block; font-size: 10pt; }
+  /* В документе выводим только непустой текст описания под названием. */
+  .description-label-text { display: none; }
+  .item-description-label { margin-top: 0; }
+  .item-description-label .print-value:empty { display: none; }
+  .item-description-label .print-value:not(:empty) { margin-top: 2mm; font-size: 9pt; }
   .summary-card { width: 105mm; max-width: 100%; margin-left: auto; break-inside: avoid; }
   .summary-lines { margin-bottom: 3mm; padding-bottom: 3mm; border-color: #555; }
   .summary-line { margin-bottom: 2mm; }

@@ -18,7 +18,8 @@ const draftFields = {
   currency,
   comment: document.querySelector("#comment"),
 };
-const itemFields = { name: ".item-name", quantity: ".item-quantity", unit: ".item-unit", price: ".item-price" };
+// Описание сохраняется вместе с остальными полями позиции.
+const itemFields = { name: ".item-name", description: ".item-description", quantity: ".item-quantity", unit: ".item-unit", price: ".item-price" };
 let restoringDraft = true;
 let copyTimer;
 const moneyFormatter = new Intl.NumberFormat("ru-RU", {
@@ -71,7 +72,8 @@ function addItem(focus = true, values = null) {
   const row = template.content.firstElementChild.cloneNode(true);
   if (values) {
     for (const [key, selector] of Object.entries(itemFields)) {
-      row.querySelector(selector).value = values[key];
+      // В старых черновиках описание отсутствует — оставляем поле пустым.
+      row.querySelector(selector).value = values[key] ?? "";
     }
   }
   items.append(row);
@@ -132,7 +134,8 @@ function preparePrint() {
       value.className = "print-value";
       field.after(value);
     }
-    value.textContent = field.value;
+    // Пустое описание не занимает места в печатной версии и PDF.
+    value.textContent = field.matches(".item-description") ? field.value.trim() : field.value;
   });
 }
 
@@ -171,7 +174,9 @@ function restoreDraft() {
       Object.keys(draftFields).every((key) => typeof draft.fields[key] === "string") &&
       ["₸", "₽", "$", "€"].includes(draft.fields.currency) &&
       Array.isArray(draft.positions) && draft.positions.every((position) =>
-        position && Object.keys(itemFields).every((key) => typeof position[key] === "string") &&
+        // Сохраняем совместимость с черновиками без необязательного описания.
+        position && Object.keys(itemFields).every((key) =>
+          (key === "description" && position[key] === undefined) || typeof position[key] === "string") &&
         ["шт", "час", "услуга"].includes(position.unit));
     if (!valid) throw new Error("Invalid draft");
     for (const [key, field] of Object.entries(draftFields)) field.value = draft.fields[key];
@@ -238,6 +243,9 @@ function shareText() {
     const price = formatMoney(readNumber(row.querySelector(".item-price").value));
     const amount = row.querySelector(".item-total").textContent;
     lines.push(`• ${name} — ${quantity} ${unit} × ${price} = ${amount}`);
+    // В WhatsApp описание идёт под своей позицией, только если оно заполнено.
+    const description = row.querySelector(".item-description").value.trim();
+    if (description) lines.push(...description.split(/\r?\n/).map((line) => `  ${line}`));
   }
   lines.push("", `Сумма: ${document.querySelector("#subtotal").textContent}`);
   if (!document.querySelector("#discount-line").hidden) {
@@ -311,10 +319,11 @@ const services = [
 
 // Добавляем услугу отдельно, заполняя только единственную пустую стартовую строку.
 function addCatalogService(service) {
-  const values = { name: service.name, quantity: "1", unit: service.unit, price: String(service.basePrice) };
+  // Подставляем описание из каталога; дальше его можно менять вручную.
+  const values = { name: service.name, description: service.description, quantity: "1", unit: service.unit, price: String(service.basePrice) };
   const firstRow = items.rows[0];
   const emptyStart = items.rows.length === 1 &&
-    [".item-name", ".item-quantity", ".item-price"].every((selector) =>
+    [".item-name", ".item-description", ".item-quantity", ".item-price"].every((selector) =>
       firstRow.querySelector(selector).value.trim() === "") &&
     firstRow.querySelector(".item-unit").value === "шт";
 
