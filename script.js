@@ -276,3 +276,57 @@ document.querySelector("#copy-whatsapp").addEventListener("click", async () => {
 
 if (!restoreDraft()) addItem(false);
 restoringDraft = false;
+
+// Базовые цены каталога указаны в тенге; единица каждой услуги — «услуга».
+const services = [
+  {
+    id: "landing-page",
+    name: "Одностраничный сайт",
+    description: "Сайт-визитка, портфолио или презентация продукта и услуг",
+    basePrice: 50000,
+    unit: "услуга",
+  },
+  {
+    id: "multi-page-site",
+    name: "Многостраничный сайт",
+    description: "Разделы, услуги и вся информация о вашей компании в одном месте",
+    basePrice: 150000,
+    unit: "услуга",
+  },
+  {
+    id: "online-store",
+    name: "Интернет-магазин",
+    description: "Каталог товаров с корзиной и удобным оформлением заказа",
+    basePrice: 250000,
+    unit: "услуга",
+  },
+  {
+    id: "site-promotion",
+    name: "Продвижение сайта",
+    description: "Контекстная реклама в Google для привлечения вашей аудитории",
+    basePrice: 80000,
+    unit: "услуга",
+  },
+];
+
+// Отображаем справочные карточки без добавления услуг в смету.
+function renderCatalog() {
+  const list = document.querySelector("#service-list");
+  list.replaceChildren();
+  for (const service of services) {
+    const card = document.createElement("li");
+    card.className = "catalog-service";
+    const title = document.createElement("h3");
+    title.textContent = service.name;
+    const description = document.createElement("p");
+    description.className = "catalog-description";
+    description.textContent = service.description;
+    const price = document.createElement("p");
+    price.className = "catalog-price";
+    price.textContent = `от ${moneyFormatter.format(service.basePrice).replace(/[\u00a0\u202f]/g, " ")} ₸`;
+    card.append(title, description, price);
+    list.append(card);
+  }
+}
+
+renderCatalog();

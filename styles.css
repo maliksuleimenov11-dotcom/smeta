@@ -15,6 +15,11 @@ h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.035
 .card { padding: 28px; margin-bottom: 24px; background: #fff; border: 1px solid #e2e7ef; border-radius: 16px; box-shadow: 0 4px 20px #1e293b04; }
 h2 { font-size: 20px; margin: 0 0 24px; }
 .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
+.catalog-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+.catalog-service { display: flex; flex-direction: column; min-width: 0; padding: 20px; border: 1px solid #e2e7ef; border-radius: 12px; overflow-wrap: anywhere; }
+.catalog-service h3 { margin: 0 0 10px; font-size: 18px; line-height: 1.4; }
+.catalog-description { margin: 0 0 16px; color: #596579; font-size: 14px; line-height: 1.6; }
+.catalog-price { margin: auto 0 0; color: var(--accent); font-weight: 700; font-size: 18px; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500; }
 input, select, textarea, button { min-width: 0; min-height: 44px; font: inherit; }
 input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd3df; border-radius: 8px; color: #1e293b; background: #fff; }
@@ -76,6 +81,7 @@ td input, td select { font-size: 15px; }
   .estimate { padding: 28px 16px; }
   .card { padding: 20px 16px; margin-bottom: 16px; }
   .details-grid { grid-template-columns: 1fr; gap: 16px; }
+  .catalog-grid { grid-template-columns: 1fr; }
   .calculation-settings { grid-template-columns: 1fr; gap: 16px; }
   table, tbody { display: block; }
   thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
@@ -98,7 +104,7 @@ td input, td select { font-size: 15px; }
 @media print {
   :root, body { background: #fff; color: #000; font-size: 11pt; }
   .estimate { max-width: none; margin: 0; padding: 0; }
-  .page-header, button, .print-actions, .calculation-settings,
+  .page-header, .service-catalog, button, .print-actions, .calculation-settings,
   .document-meta, input, select, textarea, .delete-cell,
   th:last-child, .field-label, .mobile-label { display: none !important; }
   .print-only, .print-value { display: block; }
