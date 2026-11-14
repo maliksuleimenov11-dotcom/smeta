@@ -26,6 +26,46 @@
       </div>
     </section>
 
+    <section class="card solution-picker" aria-labelledby="solution-title">
+      <h2 id="solution-title">Подобрать решение</h2>
+      <form id="solution-form" autocomplete="off" novalidate>
+        <div class="solution-questions">
+          <label>1. Какая у вас задача?
+            <select name="solution-task" required aria-describedby="solution-error">
+              <option value="">Выберите задачу</option>
+              <option value="landing-page">Презентовать одну услугу или продукт.</option>
+              <option value="multi-page-site">Рассказать о компании и нескольких услугах.</option>
+              <option value="online-store">Продавать товары онлайн.</option>
+            </select>
+          </label>
+          <label>2. Есть ли у вас сайт для этой задачи?
+            <select name="solution-site" required aria-describedby="solution-error">
+              <option value="">Выберите ответ</option>
+              <option value="new">Нет, нужен новый сайт.</option>
+              <option value="existing">Есть, новый сайт не нужен.</option>
+            </select>
+          </label>
+          <label>3. Нужна ли контекстная реклама в Google?
+            <select name="solution-ads" required aria-describedby="solution-error">
+              <option value="">Выберите ответ</option>
+              <option value="yes">Да.</option>
+              <option value="no">Нет.</option>
+            </select>
+          </label>
+        </div>
+        <p id="solution-error" class="solution-error" role="alert" hidden>Ответьте на все три вопроса, чтобы подобрать решение.</p>
+        <button type="submit" class="add-button">Подобрать решение</button>
+      </form>
+    </section>
+
+    <section class="card solution-result" id="solution-result" aria-labelledby="solution-result-title" aria-live="polite" hidden>
+      <h2 id="solution-result-title">Рекомендуемое решение</h2>
+      <ul id="recommended-services" class="recommended-services"></ul>
+      <p id="solution-explanation"></p>
+      <p id="solution-price" class="solution-price"></p>
+      <p id="solution-budget-note" hidden>Рекламный бюджет оплачивается отдельно</p>
+    </section>
+
     <!-- Каталог показывает услуги и базовые цены перед составом работ. -->
     <section class="card service-catalog" aria-labelledby="catalog-title">
       <h2 id="catalog-title">Каталог услуг</h2>

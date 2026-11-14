@@ -22,6 +22,16 @@ h2 { font-size: 20px; margin: 0 0 24px; }
 .catalog-description { margin: 0 0 16px; color: #596579; font-size: 14px; line-height: 1.6; }
 .catalog-price { margin: auto 0 0; color: var(--accent); font-weight: 700; font-size: 18px; }
 .catalog-add { width: 100%; margin-top: 16px; }
+.solution-questions { display: grid; gap: 20px; }
+.solution-questions label { min-width: 0; line-height: 1.5; }
+.solution-questions select { white-space: normal; }
+.solution-error { margin: 16px 0 0; color: #9f2424; line-height: 1.6; }
+.solution-questions select[aria-invalid="true"] { border-color: #9f2424; }
+.solution-result { border-color: var(--accent); }
+.recommended-services { margin: 0 0 16px; padding-left: 24px; line-height: 1.7; }
+.solution-result p { line-height: 1.6; overflow-wrap: anywhere; }
+.solution-price { margin: 16px 0 0; color: var(--accent); font-size: 24px; font-weight: 700; }
+#solution-budget-note { margin-bottom: 0; color: #596579; font-size: 14px; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 14px; font-weight: 500; }
 input, select, textarea, button { min-width: 0; min-height: 44px; font: inherit; }
 input, select, textarea { width: 100%; padding: 11px 12px; border: 1px solid #cbd3df; border-radius: 8px; color: #1e293b; background: #fff; }
@@ -109,7 +119,7 @@ td input, td select { font-size: 15px; }
 @media print {
   :root, body { background: #fff; color: #000; font-size: 11pt; }
   .estimate { max-width: none; margin: 0; padding: 0; }
-  .page-header, .service-catalog, button, .print-actions, .calculation-settings,
+  .page-header, .solution-picker, .solution-result, .service-catalog, button, .print-actions, .calculation-settings,
   .document-meta, input, select, textarea, .delete-cell,
   th:last-child, .field-label, .mobile-label { display: none !important; }
   .print-only, .print-value { display: block; }

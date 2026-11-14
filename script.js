@@ -376,3 +376,67 @@ function renderCatalog() {
 }
 
 renderCatalog();
+
+const solutionForm = document.querySelector("#solution-form");
+const solutionResult = document.querySelector("#solution-result");
+const solutionError = document.querySelector("#solution-error");
+
+function hideSolution() {
+  solutionResult.hidden = true;
+  solutionError.hidden = true;
+  solutionForm.querySelectorAll("select").forEach((field) => field.removeAttribute("aria-invalid"));
+}
+
+solutionForm.addEventListener("input", hideSolution);
+solutionForm.addEventListener("change", hideSolution);
+solutionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  hideSolution();
+  const task = solutionForm.elements["solution-task"];
+  const site = solutionForm.elements["solution-site"];
+  const ads = solutionForm.elements["solution-ads"];
+  const missing = [task, site, ads].filter((field) => !field.value);
+  if (missing.length) {
+    missing.forEach((field) => field.setAttribute("aria-invalid", "true"));
+    solutionError.hidden = false;
+    missing[0].focus();
+    return;
+  }
+
+  // Подбираем локально по ответам: названия и цены берём только из каталога, КП не меняем.
+  const ids = [];
+  const reasons = [];
+  if (site.value === "new") {
+    ids.push(task.value);
+    const taskReasons = {
+      "landing-page": "Для презентации одной услуги или продукта подойдёт одна страница.",
+      "multi-page-site": "Для компании с несколькими услугами подойдёт сайт с отдельными разделами.",
+      "online-store": "Для онлайн-продаж нужен каталог товаров с корзиной и оформлением заказа.",
+    };
+    reasons.push(taskReasons[task.value]);
+  } else {
+    reasons.push("Сайт уже есть, поэтому создание нового сайта не требуется.");
+  }
+  if (ads.value === "yes") {
+    ids.push("site-promotion");
+    reasons.push("Контекстная реклама в Google поможет привлечь аудиторию на сайт.");
+  }
+  const recommended = ids.map((id) => services.find((service) => service.id === id));
+  const list = document.querySelector("#recommended-services");
+  list.replaceChildren();
+  for (const service of recommended) {
+    const item = document.createElement("li");
+    item.textContent = service.name;
+    list.append(item);
+  }
+  list.hidden = recommended.length === 0;
+  document.querySelector("#solution-explanation").textContent = recommended.length
+    ? reasons.join(" ")
+    : "По вашим ответам новые услуги пока не требуются. Вы можете выбрать работы из каталога вручную";
+  const price = document.querySelector("#solution-price");
+  const baseTotal = recommended.reduce((total, service) => total + service.basePrice, 0);
+  price.textContent = `от ${moneyFormatter.format(baseTotal).replace(/[\u00a0\u202f]/g, " ")} ₸`;
+  price.hidden = recommended.length === 0;
+  document.querySelector("#solution-budget-note").hidden = !ids.includes("site-promotion");
+  solutionResult.hidden = false;
+});
