@@ -3,38 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Смета за 5 минут</title>
+  <title>Коммерческое предложение</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
 <body>
   <main class="estimate">
     <header class="page-header">
-      <h1>Смета за 5 минут</h1>
-      <p>Добавьте позиции и цены — смета посчитает итог автоматически.</p>
+      <h1>Коммерческое предложение</h1>
+      <p>Разработка и продвижение сайтов под задачи вашего бизнеса</p>
     </header>
-    <h1 class="print-only" id="print-title"></h1>
+    <h1 class="print-only" id="print-title">Коммерческое предложение</h1>
+    <p class="print-only" id="print-meta"></p>
 
     <section class="card" aria-labelledby="details-title">
       <h2 id="details-title">Реквизиты</h2>
       <div class="details-grid">
-        <label>От кого<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
-        <label>Для кого<input type="text" name="recipient" placeholder="Имя или компания клиента"></label>
-        <label class="document-meta">Номер сметы<input type="text" name="estimate-number" placeholder="Например, 001"></label>
+        <label>Исполнитель<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
+        <label>Клиент<input type="text" name="recipient" placeholder="Имя или компания клиента"></label>
+        <label class="document-meta">Номер КП<input type="text" name="estimate-number" placeholder="Например, 001"></label>
         <label class="document-meta">Дата<input type="date" name="estimate-date" id="estimate-date"></label>
       </div>
     </section>
 
-    <!-- Каталог показывает услуги и базовые цены перед позициями сметы. -->
+    <!-- Каталог показывает услуги и базовые цены перед составом работ. -->
     <section class="card service-catalog" aria-labelledby="catalog-title">
       <h2 id="catalog-title">Каталог услуг</h2>
       <ul class="catalog-grid" id="service-list"></ul>
     </section>
 
     <section class="card positions" aria-labelledby="positions-title">
-      <h2 id="positions-title">Позиции</h2>
+      <h2 id="positions-title">Состав работ</h2>
       <table>
-        <caption class="visually-hidden">Позиции сметы: количество, цена и сумма</caption>
+        <caption class="visually-hidden">Состав работ: количество, цена и сумма</caption>
         <thead>
           <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, <span class="currency-symbol">₸</span></th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
         </thead>
@@ -64,12 +65,14 @@
       <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
       <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты"></textarea>
     </section>
+    <!-- Одно примечание используется на экране, в печати и при копировании. -->
+    <p class="pricing-note" id="pricing-note">Предварительная стоимость. Итоговая цена согласовывается после обсуждения задачи.</p>
     <p class="print-only signature">Подпись ____________________</p>
     <div class="print-actions">
       <div class="action-buttons">
         <button type="button" class="add-button" id="save-pdf">Сохранить PDF</button>
         <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
-        <button type="button" class="secondary-button" id="new-estimate">Новая смета</button>
+        <button type="button" class="secondary-button" id="new-estimate">Новое КП</button>
       </div>
       <p id="copy-status" role="status" aria-live="polite"></p>
       <div id="manual-copy" hidden>

@@ -12,6 +12,7 @@ body { margin: 0; }
 .page-header { margin-bottom: 32px; }
 h1 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 40px); letter-spacing: -0.035em; }
 .page-header p { margin: 0; color: #596579; line-height: 1.6; }
+.pricing-note { margin: 0 0 24px; padding-left: 16px; border-left: 3px solid var(--accent); color: #596579; font-size: 14px; line-height: 1.6; }
 .card { padding: 28px; margin-bottom: 24px; background: #fff; border: 1px solid #e2e7ef; border-radius: 16px; box-shadow: 0 4px 20px #1e293b04; }
 h2 { font-size: 20px; margin: 0 0 24px; }
 .details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 24px; }
@@ -112,7 +113,9 @@ td input, td select { font-size: 15px; }
   .document-meta, input, select, textarea, .delete-cell,
   th:last-child, .field-label, .mobile-label { display: none !important; }
   .print-only, .print-value { display: block; }
-  #print-title { font-size: 20pt; letter-spacing: normal; margin: 0 0 8mm; }
+  #print-title { font-size: 20pt; letter-spacing: normal; margin: 0 0 3mm; }
+  #print-meta { margin: 0 0 8mm; }
+  .pricing-note { margin: 0 0 5mm; padding-left: 3mm; color: #000; border-color: #555; font-size: 10pt; break-inside: avoid; }
   .card { padding: 0; margin: 0 0 7mm; border: 0; border-radius: 0; box-shadow: none; }
   h2 { font-size: 13pt; margin: 0 0 3mm; break-after: avoid; }
   .details-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5mm; }

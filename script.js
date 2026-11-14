@@ -115,16 +115,23 @@ document.querySelector("#estimate-date").value = [
   String(today.getDate()).padStart(2, "0"),
 ].join("-");
 
-function estimateHeading() {
+// Сохраняем прежние имена полей и ключ черновика при смене названия документа.
+function estimateReference() {
   const number = document.querySelector('[name="estimate-number"]').value.trim() || "—";
   const date = document.querySelector("#estimate-date").value;
   const formattedDate = date ? date.split("-").reverse().join(".") : "—";
-  return `Смета № ${number} от ${formattedDate}`;
+  return `№ ${number} от ${formattedDate}`;
+}
+
+function estimateHeading() {
+  return `Коммерческое предложение ${estimateReference()}`;
 }
 
 function preparePrint() {
   recalculate();
-  document.querySelector("#print-title").textContent = estimateHeading();
+  // В печати номер и дата идут отдельной строкой под заголовком КП.
+  document.querySelector("#print-title").textContent = "Коммерческое предложение";
+  document.querySelector("#print-meta").textContent = estimateReference();
 
   // Текстовые копии переносят длинные значения и весь комментарий без обрезки.
   document.querySelectorAll("input, select, textarea").forEach((field) => {
@@ -161,7 +168,7 @@ function saveDraft() {
     localStorage.setItem(draftKey, JSON.stringify({ version: 1, fields, positions }));
     storageMessage("");
   } catch {
-    storageMessage("Не удалось сохранить черновик в браузере. До закрытия страницы сохраните PDF или скопируйте смету.");
+    storageMessage("Не удалось сохранить черновик в браузере. До закрытия страницы сохраните PDF или скопируйте КП.");
   }
 }
 
@@ -208,7 +215,7 @@ document.querySelector(".estimate").addEventListener("change", (event) => {
 });
 
 document.querySelector("#new-estimate").addEventListener("click", () => {
-  if (!window.confirm("Начать новую смету? Текущий черновик будет очищен.")) return;
+  if (!window.confirm("Создать новое КП? Текущий черновик будет очищен.")) return;
   const current = draftFields.number.value.trim();
   const match = current.match(/^(.*?)(\d+)$/);
   const nextNumber = match
@@ -232,8 +239,8 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
 function shareText() {
   recalculate();
   const lines = [estimateHeading()];
-  if (draftFields.sender.value.trim()) lines.push(`От кого: ${draftFields.sender.value.trim()}`);
-  if (draftFields.recipient.value.trim()) lines.push(`Для кого: ${draftFields.recipient.value.trim()}`);
+  if (draftFields.sender.value.trim()) lines.push(`Исполнитель: ${draftFields.sender.value.trim()}`);
+  if (draftFields.recipient.value.trim()) lines.push(`Клиент: ${draftFields.recipient.value.trim()}`);
   lines.push("");
   for (const row of items.rows) {
     const name = row.querySelector(".item-name").value.trim() || "Без наименования";
@@ -257,6 +264,8 @@ function shareText() {
   }
   lines.push(`Итого к оплате: ${totalOutput.textContent}`);
   if (draftFields.comment.value.trim()) lines.push("", draftFields.comment.value.trim());
+  // Берём то же примечание, которое видно в интерфейсе и печатном документе.
+  lines.push("", document.querySelector("#pricing-note").textContent.trim());
   return lines.join("\n");
 }
 
