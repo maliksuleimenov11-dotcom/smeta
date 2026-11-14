@@ -16,111 +16,120 @@
     <h1 class="print-only" id="print-title">Коммерческое предложение</h1>
     <p class="print-only" id="print-meta"></p>
 
-    <section class="card" aria-labelledby="details-title">
-      <h2 id="details-title">Реквизиты</h2>
-      <div class="details-grid">
-        <label>Исполнитель<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
-        <label>Клиент<input type="text" name="recipient" placeholder="Имя или компания клиента"></label>
-        <label class="document-meta">Номер КП<input type="text" name="estimate-number" placeholder="Например, 001"></label>
-        <label class="document-meta">Дата<input type="date" name="estimate-date" id="estimate-date"></label>
-      </div>
-    </section>
+    <div class="workspace">
+      <div class="workspace-main">
 
-    <section class="card solution-picker" aria-labelledby="solution-title">
-      <h2 id="solution-title">Подобрать решение</h2>
-      <form id="solution-form" autocomplete="off" novalidate>
-        <div class="solution-questions">
-          <label>1. Какая у вас задача?
-            <select name="solution-task" required aria-describedby="solution-error">
-              <option value="">Выберите задачу</option>
-              <option value="landing-page">Презентовать одну услугу или продукт.</option>
-              <option value="multi-page-site">Рассказать о компании и нескольких услугах.</option>
-              <option value="online-store">Продавать товары онлайн.</option>
-            </select>
-          </label>
-          <label>2. Есть ли у вас сайт для этой задачи?
-            <select name="solution-site" required aria-describedby="solution-error">
-              <option value="">Выберите ответ</option>
-              <option value="new">Нет, нужен новый сайт.</option>
-              <option value="existing">Есть, новый сайт не нужен.</option>
-            </select>
-          </label>
-          <label>3. Нужна ли контекстная реклама в Google?
-            <select name="solution-ads" required aria-describedby="solution-error">
-              <option value="">Выберите ответ</option>
-              <option value="yes">Да.</option>
-              <option value="no">Нет.</option>
-            </select>
-          </label>
+        <details class="card solution-picker" open>
+          <summary><h2 id="solution-title">Подобрать решение</h2><span class="collapse-hint" aria-hidden="true">Свернуть / развернуть</span></summary>
+          <form id="solution-form" autocomplete="off" novalidate>
+            <div class="solution-questions">
+              <label>1. Какая у вас задача?
+                <select name="solution-task" required aria-describedby="solution-error">
+                  <option value="">Выберите задачу</option>
+                  <option value="landing-page">Презентовать одну услугу или продукт.</option>
+                  <option value="multi-page-site">Рассказать о компании и нескольких услугах.</option>
+                  <option value="online-store">Продавать товары онлайн.</option>
+                </select>
+              </label>
+              <label>2. Есть ли у вас сайт для этой задачи?
+                <select name="solution-site" required aria-describedby="solution-error">
+                  <option value="">Выберите ответ</option>
+                  <option value="new">Нет, нужен новый сайт.</option>
+                  <option value="existing">Есть, новый сайт не нужен.</option>
+                </select>
+              </label>
+              <label>3. Нужна ли контекстная реклама в Google?
+                <select name="solution-ads" required aria-describedby="solution-error">
+                  <option value="">Выберите ответ</option>
+                  <option value="yes">Да.</option>
+                  <option value="no">Нет.</option>
+                </select>
+              </label>
+            </div>
+            <p id="solution-error" class="solution-error" role="alert" hidden>Ответьте на все три вопроса, чтобы подобрать решение.</p>
+            <button type="submit" class="add-button">Подобрать решение</button>
+          </form>
+
+        <section class="solution-result" id="solution-result" aria-labelledby="solution-result-title" aria-live="polite" hidden>
+          <h2 id="solution-result-title">Рекомендуемое решение</h2>
+          <ul id="recommended-services" class="recommended-services"></ul>
+          <p id="solution-explanation"></p>
+          <p id="solution-price" class="solution-price"></p>
+          <p id="solution-budget-note" hidden>Рекламный бюджет оплачивается отдельно</p>
+          <button type="button" class="add-button" id="add-solution" hidden>Добавить комплект в КП</button>
+          <p id="solution-added" class="success-message" role="status"></p>
+        </section>
+        </details>
+
+        <section class="card details-card" aria-labelledby="details-title">
+          <h2 id="details-title">Реквизиты</h2>
+          <div class="details-grid">
+            <label>Исполнитель<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
+            <label>Клиент<input type="text" name="recipient" placeholder="Имя или компания клиента"></label>
+            <label class="document-meta">Номер КП<input type="text" name="estimate-number" placeholder="Например, 001"></label>
+            <label class="document-meta">Дата<input type="date" name="estimate-date" id="estimate-date"></label>
+          </div>
+        </section>
+
+        <!-- Каталог показывает услуги и базовые цены перед составом работ. -->
+        <section class="card service-catalog" aria-labelledby="catalog-title">
+          <h2 id="catalog-title">Каталог услуг</h2>
+          <ul class="catalog-grid" id="service-list"></ul>
+        </section>
+
+        <section class="card positions" aria-labelledby="positions-title">
+          <h2 id="positions-title">Состав работ</h2>
+          <table>
+            <caption class="visually-hidden">Состав работ: количество, цена и сумма</caption>
+            <thead>
+              <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, <span class="currency-symbol">₸</span></th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
+            </thead>
+            <tbody id="items"></tbody>
+          </table>
+          <button type="button" class="add-button" id="add-item">+ Добавить позицию</button>
+          <div class="calculation-settings">
+            <label>Скидка, %<input type="text" inputmode="decimal" id="discount-rate" value="0" autocomplete="off"></label>
+            <label>НДС, %<input type="text" inputmode="decimal" id="vat-rate" value="0" autocomplete="off"></label>
+            <label>Валюта<select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
+          </div>
+        </section>
+
+        <section class="card comment-card" aria-labelledby="comment-title">
+          <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
+          <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты"></textarea>
+        </section>
+        <!-- Одно примечание используется на экране, в печати и при копировании. -->
+        <p class="pricing-note" id="pricing-note">Предварительная стоимость. Итоговая цена согласовывается после обсуждения задачи.</p>
+        <p class="print-only signature">Подпись ____________________</p>
+        <div class="card print-actions">
+          <h2>Готовое КП</h2>
+          <div class="action-buttons">
+            <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
+            <button type="button" class="secondary-button" id="new-estimate">Новое КП</button>
+          </div>
+          <p id="copy-status" role="status" aria-live="polite"></p>
+          <div id="manual-copy" hidden>
+            <label for="share-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
+            <textarea id="share-text" rows="10" readonly></textarea>
+          </div>
+          <p id="storage-status" role="status" hidden></p>
         </div>
-        <p id="solution-error" class="solution-error" role="alert" hidden>Ответьте на все три вопроса, чтобы подобрать решение.</p>
-        <button type="submit" class="add-button">Подобрать решение</button>
-      </form>
-    </section>
-
-    <section class="card solution-result" id="solution-result" aria-labelledby="solution-result-title" aria-live="polite" hidden>
-      <h2 id="solution-result-title">Рекомендуемое решение</h2>
-      <ul id="recommended-services" class="recommended-services"></ul>
-      <p id="solution-explanation"></p>
-      <p id="solution-price" class="solution-price"></p>
-      <p id="solution-budget-note" hidden>Рекламный бюджет оплачивается отдельно</p>
-    </section>
-
-    <!-- Каталог показывает услуги и базовые цены перед составом работ. -->
-    <section class="card service-catalog" aria-labelledby="catalog-title">
-      <h2 id="catalog-title">Каталог услуг</h2>
-      <ul class="catalog-grid" id="service-list"></ul>
-    </section>
-
-    <section class="card positions" aria-labelledby="positions-title">
-      <h2 id="positions-title">Состав работ</h2>
-      <table>
-        <caption class="visually-hidden">Состав работ: количество, цена и сумма</caption>
-        <thead>
-          <tr><th scope="col">Наименование</th><th scope="col">Количество</th><th scope="col">Единица</th><th scope="col">Цена, <span class="currency-symbol">₸</span></th><th scope="col" class="amount-heading">Сумма</th><th scope="col"><span class="visually-hidden">Удаление</span></th></tr>
-        </thead>
-        <tbody id="items"></tbody>
-      </table>
-      <button type="button" class="add-button" id="add-item">+ Добавить позицию</button>
-      <div class="calculation-settings">
-        <label>Скидка, %<input type="text" inputmode="decimal" id="discount-rate" value="0" autocomplete="off"></label>
-        <label>НДС, %<input type="text" inputmode="decimal" id="vat-rate" value="0" autocomplete="off"></label>
-        <label>Валюта<select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
       </div>
-    </section>
-
-    <section class="card summary-card" aria-labelledby="total-title">
-      <dl class="summary-lines">
-        <div class="summary-line"><dt>Сумма</dt><dd><output id="subtotal">0 ₸</output></dd></div>
-        <div class="summary-line" id="discount-line" hidden><dt>Скидка</dt><dd><output id="discount-amount">0 ₸</output></dd></div>
-        <div class="summary-line" id="discounted-line" hidden><dt>Сумма со скидкой</dt><dd><output id="discounted-amount">0 ₸</output></dd></div>
-        <div class="summary-line" id="vat-line" hidden><dt>НДС</dt><dd><output id="vat-amount">0 ₸</output></dd></div>
-      </dl>
-      <div class="total-card">
-        <h2 id="total-title">Итого к оплате</h2>
-        <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
-      </div>
-    </section>
-    <section class="card comment-card" aria-labelledby="comment-title">
-      <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
-      <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты"></textarea>
-    </section>
-    <!-- Одно примечание используется на экране, в печати и при копировании. -->
-    <p class="pricing-note" id="pricing-note">Предварительная стоимость. Итоговая цена согласовывается после обсуждения задачи.</p>
-    <p class="print-only signature">Подпись ____________________</p>
-    <div class="print-actions">
-      <div class="action-buttons">
-        <button type="button" class="add-button" id="save-pdf">Сохранить PDF</button>
-        <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
-        <button type="button" class="secondary-button" id="new-estimate">Новое КП</button>
-      </div>
-      <p id="copy-status" role="status" aria-live="polite"></p>
-      <div id="manual-copy" hidden>
-        <label for="share-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
-        <textarea id="share-text" rows="10" readonly></textarea>
-      </div>
-      <p id="storage-status" role="status" hidden></p>
-      <p>В окне печати выберите «Сохранить как PDF».</p>
+      <aside class="card summary-card" aria-labelledby="summary-title">
+        <h2 id="summary-title" class="summary-heading">Итого</h2>
+        <dl class="summary-lines">
+          <div class="summary-line"><dt>Сумма</dt><dd><output id="subtotal">0 ₸</output></dd></div>
+          <div class="summary-line" id="discount-line" hidden><dt>Скидка</dt><dd><output id="discount-amount">0 ₸</output></dd></div>
+          <div class="summary-line" id="discounted-line" hidden><dt>Сумма со скидкой</dt><dd><output id="discounted-amount">0 ₸</output></dd></div>
+          <div class="summary-line" id="vat-line" hidden><dt>НДС</dt><dd><output id="vat-amount">0 ₸</output></dd></div>
+        </dl>
+        <div class="total-card">
+          <h3 id="total-title">Итого к оплате</h3>
+          <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
+        </div>
+        <button type="button" class="add-button summary-pdf" id="save-pdf">Сохранить PDF</button>
+        <p class="summary-help">В окне печати выберите «Сохранить как PDF».</p>
+      </aside>
     </div>
   </main>
 

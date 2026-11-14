@@ -380,6 +380,11 @@ renderCatalog();
 const solutionForm = document.querySelector("#solution-form");
 const solutionResult = document.querySelector("#solution-result");
 const solutionError = document.querySelector("#solution-error");
+const addSolutionButton = document.querySelector("#add-solution");
+const solutionAdded = document.querySelector("#solution-added");
+let recommendedServices = [];
+let solutionSignature = null;
+let solutionWasAdded = false;
 
 function hideSolution() {
   solutionResult.hidden = true;
@@ -387,8 +392,18 @@ function hideSolution() {
   solutionForm.querySelectorAll("select").forEach((field) => field.removeAttribute("aria-invalid"));
 }
 
-solutionForm.addEventListener("input", hideSolution);
-solutionForm.addEventListener("change", hideSolution);
+function invalidateSolution() {
+  hideSolution();
+  recommendedServices = [];
+  solutionSignature = null;
+  solutionWasAdded = false;
+  addSolutionButton.disabled = false;
+  addSolutionButton.hidden = true;
+  solutionAdded.textContent = "";
+}
+
+solutionForm.addEventListener("input", invalidateSolution);
+solutionForm.addEventListener("change", invalidateSolution);
 solutionForm.addEventListener("submit", (event) => {
   event.preventDefault();
   hideSolution();
@@ -422,6 +437,15 @@ solutionForm.addEventListener("submit", (event) => {
     reasons.push("Контекстная реклама в Google поможет привлечь аудиторию на сайт.");
   }
   const recommended = ids.map((id) => services.find((service) => service.id === id));
+  const signature = JSON.stringify([task.value, site.value, ads.value]);
+  if (signature !== solutionSignature) {
+    solutionWasAdded = false;
+    solutionAdded.textContent = "";
+  }
+  solutionSignature = signature;
+  recommendedServices = recommended;
+  addSolutionButton.hidden = recommended.length === 0;
+  addSolutionButton.disabled = solutionWasAdded;
   const list = document.querySelector("#recommended-services");
   list.replaceChildren();
   for (const service of recommended) {
@@ -439,4 +463,13 @@ solutionForm.addEventListener("submit", (event) => {
   price.hidden = recommended.length === 0;
   document.querySelector("#solution-budget-note").hidden = !ids.includes("site-promotion");
   solutionResult.hidden = false;
+});
+
+// Переносим комплект существующим механизмом и блокируем дубли до нового подбора.
+addSolutionButton.addEventListener("click", () => {
+  if (solutionResult.hidden || solutionWasAdded || !recommendedServices.length) return;
+  solutionWasAdded = true;
+  addSolutionButton.disabled = true;
+  recommendedServices.forEach((service) => addCatalogService(service));
+  solutionAdded.textContent = "Комплект добавлен в КП";
 });
