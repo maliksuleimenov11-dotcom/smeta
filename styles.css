@@ -22,6 +22,14 @@ textarea { resize: vertical; line-height: 1.6; }
 .comment-card h2 label { font: inherit; }
 .print-only, .print-value { display: none; }
 .print-actions p { font-size: 14px; color: #596579; line-height: 1.6; }
+.action-buttons { display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px; }
+.action-buttons .add-button { margin-top: 0; }
+.secondary-button { padding: 12px 18px; background: #fff; color: var(--accent); border: 1px solid #cbd3df; font-weight: 600; }
+.secondary-button:hover { background: #eef2ff; }
+.action-buttons button:disabled { cursor: wait; opacity: 0.65; }
+#copy-status:empty { display: none; }
+#manual-copy { margin-top: 16px; }
+#manual-copy textarea { margin-top: 8px; }
 input::placeholder { color: #758196; }
 button { cursor: pointer; border-radius: 8px; }
 :is(input, select, textarea, button):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
@@ -80,6 +88,7 @@ td input, td select { font-size: 15px; }
   .line-total { text-align: left; align-self: center; }
   .delete-cell { text-align: right; align-self: center; }
   .add-button { width: 100%; margin-top: 20px; }
+  .action-buttons { flex-direction: column; }
   .total-card { align-items: flex-start; flex-direction: column; gap: 12px; }
   #total { text-align: left; max-width: 100%; }
 }
