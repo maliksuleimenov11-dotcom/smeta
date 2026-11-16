@@ -68,6 +68,14 @@ function recalculate() {
   totalOutput.textContent = formatMoney(roundMoney(discounted + vat));
 }
 
+// Подстраиваем высоту длинных названий и описаний под весь введённый текст.
+function resizeItemText(row) {
+  row.querySelectorAll(".item-name, .item-description").forEach((field) => {
+    field.style.height = "auto";
+    field.style.height = `${Math.max(48, field.scrollHeight + 2)}px`;
+  });
+}
+
 function addItem(focus = true, values = null) {
   const row = template.content.firstElementChild.cloneNode(true);
   if (values) {
@@ -77,6 +85,7 @@ function addItem(focus = true, values = null) {
     }
   }
   items.append(row);
+  resizeItemText(row);
   if (focus) row.querySelector(".item-name").focus();
   recalculate();
   saveDraft();
@@ -88,9 +97,14 @@ discountRate.addEventListener("input", recalculate);
 vatRate.addEventListener("input", recalculate);
 currency.addEventListener("change", recalculate);
 items.addEventListener("input", recalculate);
+items.addEventListener("input", (event) => {
+  if (event.target.matches(".item-name, .item-description")) resizeItemText(event.target.closest("tr"));
+});
+window.addEventListener("resize", () => Array.from(items.rows).forEach(resizeItemText));
 items.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" || event.isComposing || event.repeat) return;
-  if (!event.target.matches("input")) return;
+  if (!event.target.matches("input, .item-name")) return;
+  if (event.shiftKey && event.target.matches(".item-name")) return;
   if (event.target.closest("tr") === items.lastElementChild) {
     event.preventDefault();
     addItem();
@@ -135,6 +149,8 @@ function preparePrint() {
 
   // Текстовые копии переносят длинные значения и весь комментарий без обрезки.
   document.querySelectorAll("input, select, textarea").forEach((field) => {
+    // Плитки опроса не относятся к документу и не получают печатных копий.
+    if (field.closest("#solution-form")) return;
     let value = field.nextElementSibling;
     if (!value || !value.classList.contains("print-value")) {
       value = document.createElement("span");
@@ -234,6 +250,7 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
   addItem();
   restoringDraft = false;
   saveDraft();
+  renderCatalog();
 });
 
 function shareText() {
@@ -343,19 +360,24 @@ function addCatalogService(service) {
     }
     recalculate();
     saveDraft();
+    resizeItemText(firstRow);
     firstRow.querySelector(".item-name").focus();
   } else {
     addItem(true, values);
   }
 }
 
-// Отображаем карточки каталога с кнопками добавления в КП.
+// Прайс-лист использует те же данные; подтверждение не мешает добавить услугу ещё раз.
 function renderCatalog() {
   const list = document.querySelector("#service-list");
   list.replaceChildren();
-  for (const service of services) {
+  for (const [index, service] of services.entries()) {
     const card = document.createElement("li");
     card.className = "catalog-service";
+    const number = document.createElement("span");
+    number.className = "catalog-number";
+    number.textContent = String(index + 1).padStart(2, "0");
+    number.setAttribute("aria-hidden", "true");
     const title = document.createElement("h3");
     title.textContent = service.name;
     const description = document.createElement("p");
@@ -369,8 +391,19 @@ function renderCatalog() {
     button.className = "secondary-button catalog-add";
     button.textContent = "Добавить в КП";
     button.setAttribute("aria-label", `Добавить в КП: ${service.name}`);
-    button.addEventListener("click", () => addCatalogService(service));
-    card.append(title, description, price, button);
+    const feedback = document.createElement("span");
+    feedback.className = "catalog-feedback";
+    feedback.setAttribute("role", "status");
+    button.addEventListener("click", () => {
+      addCatalogService(service);
+      button.dataset.added = "true";
+      button.textContent = "Добавить ещё";
+      feedback.textContent = "Добавлено в КП ✓";
+    });
+    const actions = document.createElement("div");
+    actions.className = "catalog-actions";
+    actions.append(price, button, feedback);
+    card.append(number, title, description, actions);
     list.append(card);
   }
 }
@@ -389,7 +422,7 @@ let solutionWasAdded = false;
 function hideSolution() {
   solutionResult.hidden = true;
   solutionError.hidden = true;
-  solutionForm.querySelectorAll("select").forEach((field) => field.removeAttribute("aria-invalid"));
+  solutionForm.querySelectorAll('input[type="radio"]').forEach((field) => field.removeAttribute("aria-invalid"));
 }
 
 function invalidateSolution() {
@@ -412,9 +445,9 @@ solutionForm.addEventListener("submit", (event) => {
   const ads = solutionForm.elements["solution-ads"];
   const missing = [task, site, ads].filter((field) => !field.value);
   if (missing.length) {
-    missing.forEach((field) => field.setAttribute("aria-invalid", "true"));
+    missing.forEach((group) => Array.from(group).forEach((field) => field.setAttribute("aria-invalid", "true")));
     solutionError.hidden = false;
-    missing[0].focus();
+    missing[0][0].focus();
     return;
   }
 

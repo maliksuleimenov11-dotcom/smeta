@@ -9,9 +9,14 @@
 </head>
 <body>
   <main class="estimate">
+    <div class="masthead">
+      <div class="brand"><strong>КП</strong><span>/ Конструктор предложений</span></div>
+      <span class="masthead-caption">Веб-разработка · Продвижение</span>
+    </div>
     <header class="page-header">
-      <h1>Коммерческое предложение</h1>
-      <p>Разработка и продвижение сайтов под задачи вашего бизнеса</p>
+      <p class="eyebrow">От первого брифа до готового КП</p>
+      <h1>От задачи — <span>к готовому предложению</span></h1>
+      <p class="hero-description">Подберите услуги, уточните состав работ и отправьте клиенту предложение, в котором всё на своих местах.</p>
     </header>
     <h1 class="print-only" id="print-title">Коммерческое предложение</h1>
     <p class="print-only" id="print-meta"></p>
@@ -20,31 +25,22 @@
       <div class="workspace-main">
 
         <details class="card solution-picker" open>
-          <summary><h2 id="solution-title">Подобрать решение</h2><span class="collapse-hint" aria-hidden="true">Свернуть / развернуть</span></summary>
+          <summary><h2 id="solution-title"><span class="section-number">01 /</span> Подбор решения</h2><span class="collapse-hint" aria-hidden="true">Свернуть / развернуть</span></summary>
           <form id="solution-form" autocomplete="off" novalidate>
             <div class="solution-questions">
-              <label>1. Какая у вас задача?
-                <select name="solution-task" required aria-describedby="solution-error">
-                  <option value="">Выберите задачу</option>
-                  <option value="landing-page">Презентовать одну услугу или продукт.</option>
-                  <option value="multi-page-site">Рассказать о компании и нескольких услугах.</option>
-                  <option value="online-store">Продавать товары онлайн.</option>
-                </select>
-              </label>
-              <label>2. Есть ли у вас сайт для этой задачи?
-                <select name="solution-site" required aria-describedby="solution-error">
-                  <option value="">Выберите ответ</option>
-                  <option value="new">Нет, нужен новый сайт.</option>
-                  <option value="existing">Есть, новый сайт не нужен.</option>
-                </select>
-              </label>
-              <label>3. Нужна ли контекстная реклама в Google?
-                <select name="solution-ads" required aria-describedby="solution-error">
-                  <option value="">Выберите ответ</option>
-                  <option value="yes">Да.</option>
-                  <option value="no">Нет.</option>
-                </select>
-              </label>
+              <fieldset class="question-group"><legend><span class="question-number">1.</span> Какая у вас задача?</legend><div class="answer-options">
+                <label class="answer-tile"><input type="radio" name="solution-task" value="landing-page" required aria-describedby="solution-error"><span class="answer-copy">Презентовать одну услугу или продукт.</span></label>
+                <label class="answer-tile"><input type="radio" name="solution-task" value="multi-page-site" required aria-describedby="solution-error"><span class="answer-copy">Рассказать о компании и нескольких услугах.</span></label>
+                <label class="answer-tile"><input type="radio" name="solution-task" value="online-store" required aria-describedby="solution-error"><span class="answer-copy">Продавать товары онлайн.</span></label>
+              </div></fieldset>
+              <fieldset class="question-group"><legend><span class="question-number">2.</span> Есть ли у вас сайт для этой задачи?</legend><div class="answer-options">
+                <label class="answer-tile"><input type="radio" name="solution-site" value="new" required aria-describedby="solution-error"><span class="answer-copy">Нет, нужен новый сайт.</span></label>
+                <label class="answer-tile"><input type="radio" name="solution-site" value="existing" required aria-describedby="solution-error"><span class="answer-copy">Есть, новый сайт не нужен.</span></label>
+              </div></fieldset>
+              <fieldset class="question-group"><legend><span class="question-number">3.</span> Нужна ли контекстная реклама в Google?</legend><div class="answer-options">
+                <label class="answer-tile"><input type="radio" name="solution-ads" value="yes" required aria-describedby="solution-error"><span class="answer-copy">Да.</span></label>
+                <label class="answer-tile"><input type="radio" name="solution-ads" value="no" required aria-describedby="solution-error"><span class="answer-copy">Нет.</span></label>
+              </div></fieldset>
             </div>
             <p id="solution-error" class="solution-error" role="alert" hidden>Ответьте на все три вопроса, чтобы подобрать решение.</p>
             <button type="submit" class="add-button">Подобрать решение</button>
@@ -62,7 +58,7 @@
         </details>
 
         <section class="card details-card" aria-labelledby="details-title">
-          <h2 id="details-title">Реквизиты</h2>
+          <h2 id="details-title"><span class="section-number">02 /</span> Исполнитель и клиент</h2>
           <div class="details-grid">
             <label>Исполнитель<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
             <label>Клиент<input type="text" name="recipient" placeholder="Имя или компания клиента"></label>
@@ -73,12 +69,14 @@
 
         <!-- Каталог показывает услуги и базовые цены перед составом работ. -->
         <section class="card service-catalog" aria-labelledby="catalog-title">
-          <h2 id="catalog-title">Каталог услуг</h2>
+          <h2 id="catalog-title"><span class="section-number">03 /</span> Услуги и стоимость</h2>
+          <p class="section-intro">Базовые решения для вашего проекта. Добавьте нужные работы и уточните детали ниже.</p>
           <ul class="catalog-grid" id="service-list"></ul>
         </section>
 
         <section class="card positions" aria-labelledby="positions-title">
           <h2 id="positions-title">Состав работ</h2>
+          <p class="section-intro">Ваше предложение: названия, объём и стоимость можно изменить.</p>
           <table>
             <caption class="visually-hidden">Состав работ: количество, цена и сумма</caption>
             <thead>
@@ -95,28 +93,24 @@
         </section>
 
         <section class="card comment-card" aria-labelledby="comment-title">
-          <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
+          <h2 id="comment-title"><span class="section-number">04 /</span> Условия и комментарии</h2>
+          <label class="comment-label" for="comment">Сроки, условия оплаты и детали проекта</label>
           <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты"></textarea>
         </section>
         <!-- Одно примечание используется на экране, в печати и при копировании. -->
         <p class="pricing-note" id="pricing-note">Предварительная стоимость. Итоговая цена согласовывается после обсуждения задачи.</p>
         <p class="print-only signature">Подпись ____________________</p>
         <div class="card print-actions">
-          <h2>Готовое КП</h2>
+          <h2>Новый проект?</h2>
+          <p class="section-intro">Создайте следующее предложение, когда закончите текущее.</p>
           <div class="action-buttons">
-            <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
             <button type="button" class="secondary-button" id="new-estimate">Новое КП</button>
           </div>
-          <p id="copy-status" role="status" aria-live="polite"></p>
-          <div id="manual-copy" hidden>
-            <label for="share-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
-            <textarea id="share-text" rows="10" readonly></textarea>
-          </div>
-          <p id="storage-status" role="status" hidden></p>
         </div>
       </div>
       <aside class="card summary-card" aria-labelledby="summary-title">
-        <h2 id="summary-title" class="summary-heading">Итого</h2>
+        <h2 id="summary-title" class="summary-heading">Ваше предложение</h2>
+        <p class="summary-kicker">Стоимость проекта</p>
         <dl class="summary-lines">
           <div class="summary-line"><dt>Сумма</dt><dd><output id="subtotal">0 ₸</output></dd></div>
           <div class="summary-line" id="discount-line" hidden><dt>Скидка</dt><dd><output id="discount-amount">0 ₸</output></dd></div>
@@ -128,7 +122,15 @@
           <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
         </div>
         <button type="button" class="add-button summary-pdf" id="save-pdf">Сохранить PDF</button>
-        <p class="summary-help">В окне печати выберите «Сохранить как PDF».</p>
+        <button type="button" class="secondary-button summary-whatsapp" id="copy-whatsapp">Скопировать для WhatsApp</button>
+        <p class="summary-help">Сохраните документ или отправьте текст клиенту.</p>
+          <p id="copy-status" role="status" aria-live="polite"></p>
+          <div id="manual-copy" hidden>
+            <label for="share-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
+            <textarea id="share-text" rows="10" readonly></textarea>
+          </div>
+          <p id="storage-status" role="status" hidden></p>
+
       </aside>
     </div>
   </main>
@@ -136,7 +138,7 @@
   <template id="item-template">
     <tr>
       <td>
-        <label><span class="field-label">Наименование</span><input type="text" class="item-name" placeholder="Товар или услуга"></label>
+        <label><span class="field-label">Наименование</span><textarea class="item-name" rows="1" placeholder="Название работы или услуги"></textarea></label>
         <label class="item-description-label"><span class="description-label-text">Описание <span class="optional-note">(необязательно)</span></span><textarea class="item-description" rows="2" placeholder="Что входит в работу"></textarea></label>
       </td>
       <td><label><span class="field-label">Количество</span><input type="text" inputmode="decimal" class="item-quantity" placeholder="0" autocomplete="off"></label></td>
