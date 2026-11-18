@@ -42,6 +42,42 @@ function formatMoney(value) {
   return `${moneyFormatter.format(value === 0 ? 0 : value).replace(/[\u00a0\u202f]/g, " ")} ${currency.value}`;
 }
 
+// Разбиваем целую сумму на миллионы, тысячи и единицы; «тенге» не склоняется.
+function amountInWords(amount) {
+  if (!Number.isInteger(amount) || amount < 1 || amount > 999999999) return "";
+  const units = ["", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"];
+  const teens = ["десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"];
+  const tens = ["", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"];
+  const hundreds = ["", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"];
+  function triad(number, feminine = false) {
+    const words = [hundreds[Math.floor(number / 100)]];
+    const remainder = number % 100;
+    if (remainder >= 10 && remainder < 20) words.push(teens[remainder - 10]);
+    else {
+      const unit = remainder % 10;
+      words.push(tens[Math.floor(remainder / 10)]);
+      words.push(feminine && unit === 1 ? "одна" : feminine && unit === 2 ? "две" : units[unit]);
+    }
+    return words.filter(Boolean).join(" ");
+  }
+  function form(number, forms) {
+    const remainder = number % 100;
+    if (remainder >= 11 && remainder <= 14) return forms[2];
+    const unit = number % 10;
+    return unit === 1 ? forms[0] : unit >= 2 && unit <= 4 ? forms[1] : forms[2];
+  }
+  const millions = Math.floor(amount / 1000000);
+  const thousands = Math.floor(amount / 1000) % 1000;
+  const remainder = amount % 1000;
+  const words = [];
+  if (millions) words.push(triad(millions), form(millions, ["миллион", "миллиона", "миллионов"]));
+  if (thousands) words.push(triad(thousands, true), form(thousands, ["тысяча", "тысячи", "тысяч"]));
+  if (remainder) words.push(triad(remainder));
+  words.push("тенге");
+  const text = words.join(" ");
+  return text[0].toUpperCase() + text.slice(1);
+}
+
 function recalculate() {
   document.querySelectorAll(".currency-symbol").forEach((symbol) => {
     symbol.textContent = currency.value;
@@ -66,6 +102,11 @@ function recalculate() {
   document.querySelector("#discounted-line").hidden = discounted === 0;
   document.querySelector("#vat-line").hidden = vat === 0;
   totalOutput.textContent = formatMoney(roundMoney(discounted + vat));
+  // Используем тот же округлённый итог; ноль и другие валюты не выводим прописью.
+  const words = currency.value === "₸" ? amountInWords(roundMoney(discounted + vat)) : "";
+  const wordsOutput = document.querySelector("#total-in-words");
+  wordsOutput.textContent = words ? `Сумма прописью: ${words}` : "";
+  wordsOutput.hidden = !words;
 }
 
 // Подстраиваем высоту длинных названий и описаний под весь введённый текст.
@@ -280,6 +321,8 @@ function shareText() {
     lines.push(`НДС (${vatRate.value.trim()} %): ${document.querySelector("#vat-amount").textContent}`);
   }
   lines.push(`Итого к оплате: ${totalOutput.textContent}`);
+  const wordsOutput = document.querySelector("#total-in-words");
+  if (!wordsOutput.hidden) lines.push(wordsOutput.textContent);
   if (draftFields.comment.value.trim()) lines.push("", draftFields.comment.value.trim());
   // Берём то же примечание, которое видно в интерфейсе и печатном документе.
   lines.push("", document.querySelector("#pricing-note").textContent.trim());

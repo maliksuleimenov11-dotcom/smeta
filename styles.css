@@ -131,6 +131,7 @@ td input, td select { padding-left: 8px; padding-right: 8px; }
 .summary-line dd { margin: 0; min-width: 0; overflow-wrap: anywhere; text-align: right; }
 .total-card h3 { margin: 0 0 10px; font-size: 13px; font-weight: 400; }
 #total { display: block; color: var(--orange-light); font-family: Georgia, serif; font-size: 44px; letter-spacing: -.05em; line-height: 1.1; overflow-wrap: anywhere; }
+.total-in-words { margin: var(--space-2) 0 0; color: #ded3c2; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
 .summary-pdf, .summary-whatsapp { width: 100%; }
 .summary-pdf { background: var(--orange-light); color: var(--ink); border-color: var(--orange-light); }
 .summary-pdf:hover:not(:disabled) { background: #ffc6a8; border-color: #ffc6a8; }
@@ -226,6 +227,7 @@ td input, td select { padding-left: 8px; padding-right: 8px; }
   .total-card { display: flex; justify-content: space-between; align-items: baseline; gap: 4mm; }
   .total-card h3 { font-size: 11pt; margin: 0; }
   #total { font-family: Arial, sans-serif; font-size: 17pt; font-weight: 700; color: #000; text-align: right; }
+  .total-in-words { margin-top: 3mm; color: #000; font-size: 10pt; }
   .comment-label { font-size: 9pt; }
   .pricing-note { margin: 0 0 5mm; padding-left: 3mm; color: #000; border-color: #777; font-size: 9pt; break-inside: avoid; }
   .signature { margin-top: 6mm; break-inside: avoid; }
